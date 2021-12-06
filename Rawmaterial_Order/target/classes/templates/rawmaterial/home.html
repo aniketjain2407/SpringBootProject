@@ -1,0 +1,272 @@
+<!doctype html>
+<html>
+<head xmlns:th="http://www.thymeleaf.org">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" static:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+    <script static:src="@{/bootstrap-5.0.2-dist/js/bootstrap.min.js}"></script>
+    <title>Document</title>
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">WebSiteName</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+            <li><a href="/user/">User</a></li>
+            <li><a href="/accountant">Accountant</a></li>
+            <li><a href="/student">Student</a></li>
+        </ul>
+        <form action = "/logout" method="post" class="btn navbar-btn navbar-right pull-right">
+			<input type="submit" value="logout" />
+		</form>
+    </div>
+</nav>
+
+
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-sm-4 container-fluid bg-danger">
+            <div class="form-group" >
+                <form action="#" id="formff">
+                    <div class="form-control mt-1">
+                        <label class="form-label">Farmer Franchise:</label>
+                        <input type="text" name ="Franchise" placeholder="Franchise Name" id = "Franchise" class="mt-1"/>
+                    </div>
+                    <div class="form-control mt-1">
+                        <label class="form-label">Product:</label>
+                        <input type="text" name ="Product" placeholder="Product Name" id = "Product" class="mt-1"/>
+                    </div>
+                    <div class="form-control mt-1">
+                        <label class="form-label">Quantity:</label>
+                        <input type="Number" name ="Quantity" placeholder="Quantity" class="mt-1" id="Quantity"/>
+                    </div>
+                    <div class="form-control mt-1">
+                        <label class="form-label">District:</label>
+                        <input type="text" name ="District" placeholder="District" class="mt-1" id="District"/>
+                    </div>
+                    <div class="form-control mt-1">
+                        <label class="form-label">State:</label>
+                        <input type="text" name ="State" placeholder="State" class="mt-1" id="State"/>
+
+                    </div>
+                    <button type="click" class="btn btn-success mt-1" align="left" id="save">save</button>
+                </form>
+            </div>
+            <div class="widget-box transparent">
+                <div class="widget-header widget-header-flat">
+                    <h4 class="widget-title lighter orange">
+                        <i class="ace-icon fa fa-star blue"></i> Account Types
+                    </h4>
+
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse"> <i
+                                class="ace-icon fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div style="display: block;" class="widget-body">
+                    <div class="widget-main no-padding">
+                        <table class="table table-bordered table-striped">
+                            <thead class="thin-border-bottom">
+                            <tr>
+                                <th><i class="ace-icon fa fa-caret-right blue"></i>
+                                    Type
+                                </th>
+
+                                <th><i class="ace-icon fa fa-caret-right blue"></i>Count
+                                </th>
+
+                                <th class="hidden-480"><i
+                                        class="ace-icon fa fa-caret-right blue"></i>Change
+                                </th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr>
+                                <td>Sellers (Farmers)</td>
+                                <td th:text="${ordercount}"><b class="green"36></b></td>
+
+                                <td class="hidden-480"><span
+                                        class="label label-info arrowed-right arrowed-in">12%
+												increase</span></td>
+                            </tr>
+
+                            <tr>
+                                <td>Buyers</td>
+
+                                <td><b class="red">16</b></td>
+
+                                <td class="hidden-480"><span
+                                        class="label label-success arrowed-in arrowed-in-right">20%
+												increase</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.widget-main -->
+                </div>
+                <!-- /.widget-body -->
+            </div>
+            
+        </div>
+        <div class="col-sm-8 ">
+			   <table class="table table-hover table-bordered" id="item-list">
+                    <thead>
+                    <th>Id</th>
+                    <th>Franchise</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>District</th>
+                    <th>State</th>
+                    </thead>
+                    <tbody id="add-data" >
+                    </tbody>
+                </table>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+<script>
+	var ID = 0;
+	var message = '';
+    $(document).ready(function () {
+    	var check = true;
+    	getall();
+        $("#save").click(function (event) {
+            addff();
+            event.preventDefault();
+        });
+        
+    });
+
+    function addff(){
+    	if(ID === 0){
+    		console.log("When creating new record:"+ID);
+    		dataurl = "http://localhost:8000/save";
+    		message  = "New Record Created Successfully";
+    	}
+    	else{
+    		dataurl = "/edit/"+ID;
+    		ID = 0;
+    		message  = "Record Updated Successfully";
+
+    	}
+        $.ajax({
+            type:"POST",
+            data:$("#formff").serialize(),
+            datatype:"JSON",
+            url: dataurl
+        })
+        .done(function(){
+        	alert(message);
+        	getall();
+        	$("#formff")[0].reset();
+        	
+        })
+        .fail(function(xhr,status,error){
+        	console.log("An error occurred"+xhr.responseText+status+error);
+        })
+        ;
+    }
+    
+
+    
+    function deletebutton(id){
+    	alert("you are deleting a record corresponding to" + id+typeof(id));
+    	$.ajax({
+    		type:"GET",
+    		url:"/delete/"+id,
+    	
+    	}).done(function(){
+    		alert("Recorded Delete Successfully");
+    		$("item-list").remove();
+    		getall();
+    		
+    	})
+    	.fail(function(xhr,status,error){
+        	console.log("An error occurred"+xhr.responseText+status+error);
+        })
+        ;
+    	
+    }
+    function getall(){
+
+    	$("#add-data").empty();
+    	$.ajax({
+    		type:"GET",
+    		url:"http://localhost:8000/list",
+    		cache:false,
+    		datatype:"JSON",
+    		success:function(items){
+    			//console.log(items);
+    	    	addrow(items);
+    		},
+    		error:function(){
+    			console.log("error occured");
+    		}
+    	});
+    }
+    
+    function addrow(data){
+		var i =0;
+		for(i=0;i<data.length;i++){
+			var html = '<tr>';
+			html += `<td><button class="btn btn-info btn-sm" onclick="editbutton('${data[i].id}')">`+data[i].id+`</button></td>`;
+			html += '<td>'+data[i].franchise+'</td>';
+			html += '<td>'+data[i].product+'</td>';
+			html += '<td>'+data[i].quantity+'</td>';
+			html += '<td>'+data[i].district+'</td>';
+			html += '<td>'+data[i].state+'</td>';
+			html += `<td><button  class="btn btn-info btn-sm" onclick="deletebutton('${data[i].id}')">delete</button></td>`;
+			$("#add-data").append(html);
+		}
+
+	}
+    
+    function editbutton(id){
+    	alert("you clicked on edit button "+ id);
+    	$.ajax({
+    		type:"GET",
+    		url:"/view/"+id,
+    		datatype:"JSON",
+    		success:function(item){
+    			console.log(item);
+    			$("#Franchise").val(item.franchise);
+    			$("#Product").val(item.product);
+    			$("#District").val(item.district);
+    			$("#State").val(item.state);
+    			$("#Quantity").val(item.quantity);
+				ID = item.id;
+				console.log(ID + item.id);
+    		}
+    	});
+    }
+    
+    function update(id){
+    	$.ajax({
+    		type:"POST",
+    		data:$("#formff").serialize(),
+    		url:"/edit/"+id,
+    		success:function(item){
+    			alert("Record Updated Successfully");
+    		}
+    	})
+    }
+    
+
+</script>
+</body>
+</html>

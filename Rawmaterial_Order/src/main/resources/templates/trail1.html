@@ -1,0 +1,228 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" static:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+    <script static:src="@{/bootstrap-5.0.2-dist/js/bootstrap.min.js}"></script>
+    <title>Document</title>
+</head>
+<body>
+<div class="container-fluid bg-dark">
+    <nav class="navbar-default">
+        <div class="container-default">
+            <div class="navbar-header text-white">
+                <h2 class="mt-2">Farmer Franchise</h2>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-sm-4 container-fluid">
+            <div class="form-group" >
+                <form action="#" id="formff">
+                    <div class="form-control mt-1">
+                        <label class="form-label">Farmer Franchise:</label>
+                        <input type="text" name ="Franchise" placeholder="Franchise Name" id = "Franchise" class="mt-1"/>
+                    </div>
+                    <div class="form-control mt-1">
+                        <label class="form-label">Product:</label>
+                        <input type="text" name ="Product" placeholder="Product Name" id = "Product" class="mt-1"/>
+                    </div>
+                    <div class="form-control mt-1">
+                        <label class="form-label">Quantity:</label>
+                        <input type="Number" name ="Quantity" placeholder="Quantity" class="mt-1" id="Quantity"/>
+                    </div>
+                    <div class="form-control mt-1">
+                        <label class="form-label">District:</label>
+                        <input type="text" name ="District" placeholder="District" class="mt-1" id="District"/>
+                    </div>
+                    <div class="form-control mt-1">
+                        <label class="form-label">State:</label>
+                        <input type="text" name ="State" placeholder="State" class="mt-1" id="State"/>
+
+                    </div>
+                    <button type="click" class="btn btn-success mt-1" align="left" id="save">save</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-sm-8 ">
+			   <table class="table table-hover table-bordered" id="item-list">
+                    <thead>
+                    <th>Id</th>
+                    <th>Franchise</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>District</th>
+                    <th>State</th>
+                    </thead>
+                    <tbody id="add-data" >
+                    </tbody>
+                </table>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+<script>
+	
+    $(document).ready(function () {
+    	var check = true;
+    	getall();
+        $("#save").click(function (event) {
+            addff();
+            event.preventDefault();
+        });
+        
+    });
+
+    function addff(){
+        //var ff = {}
+        //ff["Franchise"] = $("#Franchise").val();
+        //ff["Product"] = $("#Product").val();
+        //ff["Quantity"] = $("#Quantity").val();
+        //ff["District"] = $("#District").val();
+        //ff["State"] = $("#State").val();
+        //console.log(ff);
+        //console.log(typeof($("#formff").serialize()));
+        $.ajax({
+            type:"POST",
+            data:$("#formff").serialize(),
+            //data:ff,
+            datatype:"JSON",
+            url:"http://localhost:8000/save"
+            /*success:function (){
+               //alert("Record addedd successfully");
+            	//showMessage('New franchise addedd Successfully.', '', 'success');
+            	alert("record added successfully");	
+            	//console.log(data);
+                
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //showMessage(XMLHttpRequest.responseText, '', 'error');
+                console.log("error:" + XMLHttpRequest.responseText+errorThrown);
+                //console.log("error occured")
+            }*/
+        })
+        .done(function(data){
+        	alert("Record updated successfully");
+        	getall();
+        	$("#formff")[0].reset();
+        	
+        })
+        .fail(function(xhr,status,error){
+        	console.log("An error occurred"+xhr.responseText+status+error);
+        })
+        ;
+    }
+    
+
+    
+    function deletebutton(id){
+    	alert("you are deleting a record corresponding to" + id+typeof(id));
+    	$.ajax({
+    		type:"GET",
+    		url:"/delete/"+id,
+    	
+    	}).done(function(){
+    		alert("Recorded Delete Successfully");
+    		$("item-list").remove();
+    		getall();
+    		
+    	})
+    	.fail(function(xhr,status,error){
+        	console.log("An error occurred"+xhr.responseText+status+error);
+        })
+        ;
+    	
+    }
+    function getall(){
+    	/*if(check===true){
+    		$("#item-list").DataTable({
+    			language : {
+					searchPlaceholder : "Search..."
+				}
+    		});
+    		check = false;
+    	};*/
+    	$("#add-data").empty();
+    	$.ajax({
+    		type:"GET",
+    		url:"http://localhost:8000/list",
+    		cache:false,
+    		datatype:"JSON",
+    		success:function(items){
+    			//console.log(items);
+    	    	addrow(items);
+    		},
+    		error:function(){
+    			console.log("error occured");
+    		}
+    	});
+    }
+    
+    function addrow(data){
+		//console.log(data)
+		var i =0;
+		for(i=0;i<data.length;i++){
+			var html = '<tr>';
+			html += `<td><button class="btn btn-info btn-sm" onclick="editbutton('${data[i].id}')">`+data[i].id+`</button></td>`;
+			html += '<td>'+data[i].franchise+'</td>';
+			html += '<td>'+data[i].product+'</td>';
+			html += '<td>'+data[i].quantity+'</td>';
+			html += '<td>'+data[i].district+'</td>';
+			html += '<td>'+data[i].state+'</td>';
+			html += `<td><button  class="btn btn-info btn-sm" onclick="deletebutton('${data[i].id}')">delete</button></td>`;
+			//html += '<td class="center"><label class="pos-rel"> <input type="checkbox" th:attr="data-item-id=${data.id}" class="ace"/> <span class="lbl"></span> </label></td></tr>';
+			//console.log(html);
+			$("#add-data").append(html);
+		}
+
+	}
+    
+    function editbutton(id){
+    	alert("you clicked on edit button "+ id);
+    	$.ajax({
+    		type:"GET",
+    		url:"/view/"+id,
+    		datatype:"JSON",
+    		success:function(item){
+    			console.log(item);
+    			$("#Franchise").val(item.franchise);
+    			$("#Product").val(item.product);
+    			$("#District").val(item.district);
+    			$("#State").val(item.state);
+    			$("#Quantity").val(item.quantity);
+    			
+    			$("#save").click(function (event) {
+        			update(item.id);
+    	            event.preventDefault();
+    	        });
+    		}
+    	});
+    }
+    
+    function update(id){
+    	$.ajax({
+    		type:"POST",
+    		data:$("#formff").serialize(),
+    		url:"/edit/"+id,
+    		success:function(item){
+    			alert("Record Updated Successfully");
+    		}
+    	})
+    }
+    
+
+</script>
+</body>
+</html>

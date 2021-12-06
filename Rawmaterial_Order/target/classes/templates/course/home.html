@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+
+<head xmlns:th="http://www.thymeleaf.org">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" static:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+    <script static:src="@{/bootstrap-5.0.2-dist/js/bootstrap.min.js}"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Mywebiste</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="/">Home</a></li>
+                <li><a href="/user/">User</a></li>
+                <li><a href="/accountant">Accountant</a></li>
+                <li><a href="/student">Student</a></li>
+            </ul>
+            <form action="/logout" method="post" class="btn navbar-btn navbar-right pull-right">
+                <input type="submit" value="logout" />
+            </form>
+        </div>
+    </nav>
+    <div class="container-fluid">
+
+        <div class="row" style="padding: 10px;">
+
+            <div class="col-sm-4" style="background-color: #2f86a6; padding: 5px; border-radius: 10px;">
+                <p align="center" style="font-size: 20px; font-weight: bold; color: white; margin-top: 10px;"> Course
+                    Editor Form </p>
+                <form class="form-horizontal" id="courseform">
+
+                    <div class="form-group" style="justify-content: space-between; align-content: space-between;">
+                        <label class="control-label col-sm-3" style="text-align:right; color: white;"
+                            for="name">Field:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="field" id="field" class="form-control" style="height: 30px;"
+                                placeholder="Course Name">
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="justify-content: space-between; align-content: space-between;">
+                        <label class="control-label col-sm-3" style="text-align:right; color: white"
+                            for="name">Name:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="name" id="name" class="form-control" placeholder="Course Name"
+                                style="height: 30px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="justify-content: space-between; align-content: space-between;">
+                        <label class="control-label col-sm-3" style="text-align:right; color: white"
+                            for="name">Minmarks:</label>
+                        <div class="col-sm-8">
+                            <input type="number" name="minMarks" id="minMarks" class="form-control" placeholder="Course Name"
+                                style="height: 30px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="justify-content: space-between; align-content: space-between;">
+                        <label class="control-label col-sm-3" style="text-align:right; color: white"
+                            for="name">Maxmarks:</label>
+                        <div class="col-sm-8">
+                            <input type="number" name="maxMarks" id="maxMarks" class="form-control" placeholder="Course Name"
+                                style="height: 30px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="justify-content: space-between; align-content: space-between;">
+                        <label class="control-label col-sm-3" style="text-align:right; color: white"
+                            for="name">Price:</label>
+                        <div class="col-sm-8">
+                            <input type="number" name="price" id="price" class="form-control" placeholder="Course Name"
+                                style="height: 30px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="justify-content: space-between; align-content: space-between;">
+                        <label class="control-label col-sm-3" style="text-align:right; color: white"
+                            for="name">Discount:</label>
+                        <div class="col-sm-8">
+                            <input type="number" name="discount" id="discount" class="form-control" placeholder="Course Name"
+                                style="height: 30px;">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group" style="justify-content: space-between; align-content: space-between;">
+                        <label class="control-label col-sm-3" style="text-align:right; color: white"
+                            for="name">Tax:</label>
+                        <div class="col-sm-8">
+                            <input type="number" name="tax" id="tax" class="form-control" placeholder="Course Name"
+                                style="height: 30px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="control-label col-sm-3" style="text-align:right; color: white"
+                            for="name">Active:</label>
+
+                        <div class="col-sm-2">
+                            <input type="checkbox" name="isActive" id="isActive" checked="true" value=true style="height: 30px;" />
+
+                        </div>
+
+                        <div class="col-sm-6" style="display:flex;justify-content: right;">
+                            <button id = "save" type="submit" class="form-control"
+                                style="display: flex;align-items: center;justify-content: center;width: 70%;height: 30px; background-color:rgb(2, 19, 37);color: white; font-size:large; padding: 5px; border-radius: 20px;">Submit</button>
+                        </div>
+
+                    </div>
+
+
+
+                </form>
+            </div>
+
+            <div class="col-sm-8" style="background-color:rgb(130, 225, 238); border-radius: 10px;">
+                <p align="center" style="font-size: 20px; font-weight: bold; margin-top: 10px;"> List of Courses </p>
+                <table class="table table-hover table-bordered" id="courses">
+                    <thead>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Field</th>
+                        <th>Price</th>
+                        <th>Minmarks</th>
+                        <th>Maxmarks</th>
+                        <th>Discount</th>
+                        <th>Tax</th>
+                        <th>Active</th>
+                        <th>Delete</th>
+
+                    </thead>
+					<tbody id = "table-body">
+						<th:block th:each ="course:${courses}"> 
+							<tr th:id="'row-' + ${course.id}">
+								<td><button class="btn btn-info btn-sm" onclick= "editbutton(this.innerText)" th:text = "${course.id}">Id</button></td>
+								<td th:text = "${course.name}">Name</td>
+								<td th:text = "${course.field}">Field</td>
+								<td th:text = "${course.price}">Price</td>
+                                <td th:text = "${course.minMarks}">Minmarks</td>
+								<td th:text = "${course.maxMarks}">Maxmarks</td>
+								<td th:text = "${course.discount}">Discount</td>
+                                <td th:text = "${course.tax}">Tax</td>
+                                <td th:text = "${course.isActive}">Isactive</td>
+								<td><button  class="btn btn-info btn-sm" th:onclick = "'javascript:deletebutton(' + ${course.id} + ')'" >delete</button></td>
+							</tr>
+						</th:block>
+					</tbody>
+                </table>
+            </div>
+
+        </div>
+</body>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script>
+    var ID =0;
+    var t =  $("#courses").DataTable();
+    $(document).ready(function(){
+        $("#save").click(function(event){
+        	addCourse();
+        	event.preventDefault();
+        })
+    });
+    
+    function editbutton(Id){
+    	alert("You click on this edited id"+ Id);
+    	$.ajax({
+    		url: "http://localhost:8000/course/view/"+Id,
+    		type: "GET",
+    		datatype:"JSON",
+    		success:function(item){
+    			$("#name").val(item.name);
+    			$("#field").val(item.field);
+    			$("#minMarks").val(item.minMarks);
+    			$("#maxMarks").val(item.maxMarks);
+    			$("#discount").val(item.discount);
+    			$("#tax").val(item.tax);
+    			$("#isActive").val(item.isActive);
+    			$("#price").val(item.price);
+    			ID = item.id;
+    			// console.log("ID"+ item.id + Id);
+    		}
+    	})
+        .fail(function(xhr,status,error){
+        	console.log("An error occurred"+xhr.responseText+status+error);
+        })
+    }
+    
+    function deletebutton(Id){
+    	alert("You click on this delete id" + Id);
+    	$.ajax({
+    		url:"http://localhost:8000/course/delete/"+Id,
+    		method:"POST",
+    		success:function(){
+    			alert("Item deleted Successfully");
+    		}
+    	})
+    }
+    
+    function addCourse(){
+     	if(ID === 0){
+    		dataurl = "http://localhost:8000/course/save";
+    		message = "New Record saved successfully";
+    	}
+     	else{
+    		dataurl = "http://localhost:8000/course/edit/"+ID;
+    		message = "Selected course has beed edited successfully";
+    		//$("#row-"+Id).remove();
+    		ID = 0;
+    	}
+    	$.ajax({
+            url:dataurl,
+            type:"POST",
+            data : $("#courseform").serialize()
+        })
+        .done(function(item){
+        	alert(message);
+        	addrow(item);
+        	// addnew(item);
+        })
+        .fail(function(xhr,status,error){
+        	console.log("An error occurred"+xhr.responseText+status+error);
+        })
+    }
+    
+    function addrow(id){
+    	var id = "<td><button class='btn btn-info btn-sm' onclick= 'editbutton(this.innerText)'>"+ id +"</button></td>";
+    	// var del = "<td><button class='btn btn-info btn-sm'value= onclick='deletebutton()'>" + delete +"</button></td>"; 
+    	var del =  `<td><button class="btn btn-info btn-sm" onclick = "'javascript:deletebutton(' + ${id} + ')'")">delete</button></td>`; 
+    	
+    	//var del = "<td><button class='btn btn-info btn-sm' value='1' onclick='deletebutton(this.getAttribute(class))'>delete</button></td>";
+    	
+     		/* var markup = "<tr id=row-"+id+">"
+				markup += "<td><button class='btn btn-info btn-sm' onclick= 'editbutton(this.innerText)''>"+ id +"</button></td>"
+				markup += "<td>"+ $("#name").val() +"</td>"
+				markup += "<td>"+ $("#field").val() +"</td>"
+				markup += "<td>"+ $("#price").val() +"</td>"
+				markup += "<td>"+ $("#minMarks").val() +"</td>"
+				markup += "<td>"+ $("#maxMarks").val() +"</td>"
+				markup += "<td>"+ $("#discount").val()  +"</td>"
+				markup += "<td>"+ $("#tax").val() +"</td>"
+				markup += "<td>"+ $("#isActive").val() +"</td>"
+				markup +=  `<td><button  class="btn btn-info btn-sm" onclick="deletebutton('${id}')">delete</button></td>`;
+				markup += "</tr>"; */
+				
+				t.row.add([id, $("#name").val(),
+    			$("#field").val(),
+    			$("#price").val(),
+    			$("#minMarks").val(),
+    			$("#maxMarks").val(),
+    			$("#discount").val(), 
+    	    	$("#tax").val(),
+    			$("#isActive").val(), del ]).draw(); 
+    	 
+     	$("#courseform")[0].reset();
+    }
+
+</script>
+
+</html>

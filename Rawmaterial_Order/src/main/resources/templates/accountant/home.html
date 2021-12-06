@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head xmlns:th="http://www.thymeleaf.org">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" static:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+    <script static:src="@{/bootstrap-5.0.2-dist/js/bootstrap.min.js}"></script>
+    <title>Document</title>
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">WebSiteName</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+            <li><a href="/user/">User</a></li>
+            <li><a href="/accountant">Accountant</a></li>
+            <li><a href="/student">Student</a></li>
+        </ul>
+        <form action = "/logout" method="post" class="btn navbar-btn navbar-right pull-right">
+			<input type="submit" value="logout" />
+		</form>
+    </div>
+</nav>
+<div>
+	<div class="row">
+		<div class="col-sm-4"><p align="center"> Accountant container of size 4</p></div>
+		<div class="col-sm-8"><p align="center"> Accountant container of size 8</p></div>
+	</div>
+</div>
+</body>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+</html>
